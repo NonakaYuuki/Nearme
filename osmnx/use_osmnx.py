@@ -143,6 +143,9 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     #for i in range(len(taxi.time_list)-1):
         #if round(taxi.time_list[i+1]-taxi.time_list[i],1)!=0.1:
             #print('kora',i)
+    
+    #アニメーション
+    
 
 if __name__=='__main__':
     Simulation(1,1,500)
