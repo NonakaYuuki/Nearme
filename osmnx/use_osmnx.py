@@ -50,13 +50,14 @@ def Simulation(number_of_taxi,number_of_order,timespan):
         taxi_list_c.append(Taxi(i+1,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node))))
         print('タクシー',taxi_list_c[-1].now_position())
     taxi_1=taxi_list_c[0]
+    #taxi_2=taxi_list_c[1]
     taxi_list=copy.copy(taxi_list_c)
     
     #注文オブジェクト生成
     random.seed(1)
     order_list=[]
     for i in range(number_of_order):
-        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(0,timespan-250)))
+        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan-250-248)))
         if order_list[-1].orig==order_list[-1].dest:
             print('この客はなんだ')
         print('注文',order_list[-1].orig,order_list[-1].dest,order_list[-1].time)
@@ -68,15 +69,23 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     taxi_orig_cost=[0]*number_of_order
     orig_dest_cost=[0]*number_of_order
     ride_rate_list=[0]
+    order_time_list=[None] #animationのため
 
 
     #シミュレーション
     for t in range(int(timespan*10)):
         t=round((t+1)*0.1,1)
         #注文リストの解凍
+        order_time_list_list=[] #for animation
         for order in order_list:
             if order.time==t:
                 order_open_list.append(order)
+                order_time_list_list.append(order) #for animation
+        #for animation
+        if order_time_list_list==[]:
+            order_time_list.append(None)
+        else:
+            order_time_list.append(order_time_list_list)
         
         #迎えにいくタクシーを選択
         order_open_list_copy=copy.copy(order_open_list)
@@ -136,8 +145,13 @@ def Simulation(number_of_taxi,number_of_order,timespan):
                 count+=1
         ride_rate_list.append(float(count)/number_of_taxi)
         hold_taxi_list=hold_taxi_list_copy
-    #print(taxi_1.position_list)
+    
+    print(len(taxi_1.position_list))
+    print(len(order_time_list))
     #print(taxi_1.time_list)
+    #print(len(taxi_2.time_list))
+    #print(taxi_2.time_list)
+
     #print(route_info1['time_list'])
     #print(route_info2['time_list'])
     #for i in range(len(taxi.time_list)-1):
@@ -145,8 +159,10 @@ def Simulation(number_of_taxi,number_of_order,timespan):
             #print('kora',i)
     
     #アニメーション
+    shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
+    shortest_path_chuoku.create_gif(in_dir='animation', out_filename='animation.gif')
     
 
 if __name__=='__main__':
-    Simulation(1,1,500)
+    Simulation(1,2,500)
 
