@@ -30,6 +30,7 @@ class Order:
         self.orig=orig
         self.dest=dest
         self.time=time
+        self.finish_time=None
 
 #一番近いタクシーはどれか(タクシーと最短時間を返す)
 def which_taxi(order_node,taxi_list,t):
@@ -57,7 +58,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     random.seed(1)
     order_list=[]
     for i in range(number_of_order):
-        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan-250-248)))
+        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan-45)))
         if order_list[-1].orig==order_list[-1].dest:
             print('この客はなんだ')
         print('注文',order_list[-1].orig,order_list[-1].dest,order_list[-1].time)
@@ -70,6 +71,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     orig_dest_cost=[0]*number_of_order
     ride_rate_list=[0]
     order_time_list=[None] #animationのため
+    order_opened_list=[]
 
 
     #シミュレーション
@@ -81,6 +83,14 @@ def Simulation(number_of_taxi,number_of_order,timespan):
             if order.time==t:
                 order_open_list.append(order)
                 order_time_list_list.append(order) #for animation
+                order_opened_list.append(order) #for animation
+        #for animation(経路をずっと表示させるため)
+        order_opened_list_copy=copy.copy(order_opened_list)
+        for order in order_opened_list_copy:
+            if order.finish_time==t:
+                order_opened_list.remove(order)
+            else:
+                order_time_list_list.append(order)
         #for animation
         if order_time_list_list==[]:
             order_time_list.append(None)
@@ -118,6 +128,8 @@ def Simulation(number_of_taxi,number_of_order,timespan):
                 hold_taxi_list.append(selected_taxi)
                 #注文リストから除外
                 order_open_list_copy.remove(order)
+                #アニメーションのため
+                order.finish_time=selected_taxi.dest_time
         order_open_list=order_open_list_copy
         
         #とどまるタクシー
@@ -164,5 +176,5 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     
 
 if __name__=='__main__':
-    Simulation(1,2,500)
+    Simulation(1,2,50)
 

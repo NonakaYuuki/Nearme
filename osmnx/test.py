@@ -36,7 +36,7 @@ def create_gif(in_dir, out_filename):
  
     # appendした画像配列をGIFにする。durationで持続時間、loopでループ数を指定可能。
     imgs[0].save(out_filename,
-                 save_all=True, append_images=imgs[1:], optimize=False, duration=1, loop=0)
+                 save_all=True, append_images=imgs[1:], optimize=False, duration=30, loop=0)
  
 # GIFアニメーションを作成する関数を実行する
 if __name__=='__main__':
