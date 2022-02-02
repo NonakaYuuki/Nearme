@@ -178,7 +178,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     plt.ylabel('ride rate')
     plt.ylim(0,1)
     #plt.show()
-    plt.savefig('./osmnx/riderate.png')
+    plt.savefig('./osmnx/result/riderate.png')
 
     #時間の積み重ね棒グラフ化
     label=[]
@@ -195,7 +195,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     ax.set_xticklabels(label, rotation=15, ha='center')
     plt.legend()
     #plt.show()
-    plt.savefig('./osmnx/graph.png')
+    plt.savefig('./osmnx/result/graph.png')
     #print('left order time',np.average(left_order_time))
     #print('move to passengers',np.average(taxi_start_distance))
     #print('take passengers',np.average(distance_order))
@@ -204,7 +204,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
 
     #アニメーション
     shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
-    shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/animation.gif')
+    shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/result/animation.gif')
     
 
 if __name__=='__main__':

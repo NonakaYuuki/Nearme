@@ -43,7 +43,7 @@ for dic in route2_length_list:
 
 #artists=[]
 fig,ax=re_plot.plot_graph_route(G,route1,route_color='r',node_color='dimgray',bgcolor='white',edge_color='dimgray')
-fig.savefig('./osmnx/test.png')
+fig.savefig('./osmnx/result/test.png')
 
 fig,ax=re_plot.plot_graph_route(G,route2,route_color='r',node_color='black',bgcolor='white',edge_color='black')
 
