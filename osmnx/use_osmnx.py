@@ -58,7 +58,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
     random.seed(1)
     order_list=[]
     for i in range(number_of_order):
-        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan-45)))
+        order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan)))
         if order_list[-1].orig==order_list[-1].dest:
             print('この客はなんだ')
         print('注文',order_list[-1].orig,order_list[-1].dest,order_list[-1].time)
@@ -119,7 +119,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
                 selected_taxi.time_list+=route_info2['time_list']
                 #statusの追加
                 selected_taxi.status_list+=[1]*len(route_info1['node_list'])
-                selected_taxi.status_list+=[0]*len(route_info2['node_list'])
+                selected_taxi.status_list+=[2]*len(route_info2['node_list'])
                 #コスト追加
                 taxi_orig_cost[order.number]=route_info1['travel_time']
                 orig_dest_cost[order.number]=route_info2['travel_time']
@@ -153,7 +153,7 @@ def Simulation(number_of_taxi,number_of_order,timespan):
             if taxi.dest_time==t:
                 hold_taxi_list_copy.remove(taxi)
                 free_taxi_list.append(taxi)
-            elif taxi.status==2:
+            elif taxi.status_list[int(t*10-1)]==2:
                 count+=1
         ride_rate_list.append(float(count)/number_of_taxi)
         hold_taxi_list=hold_taxi_list_copy
@@ -170,11 +170,43 @@ def Simulation(number_of_taxi,number_of_order,timespan):
         #if round(taxi.time_list[i+1]-taxi.time_list[i],1)!=0.1:
             #print('kora',i)
     
+    #乗車率のグラフ化
+    x=[i/10 for i in range(timespan*10+1)]
+    #print(ride_rate_list)
+    plt.plot(x,ride_rate_list)
+    plt.xlabel('time')
+    plt.ylabel('ride rate')
+    plt.ylim(0,1)
+    #plt.show()
+    plt.savefig('./riderate.png')
+
+    #時間の積み重ね棒グラフ化
+    label=[]
+    for l in range(len(order_list)):
+        label.append('Passenger{}'.format(l+1))
+    y1=np.array(waiting_time_cost)
+    y2=np.array(taxi_orig_cost)
+    y3=np.array(orig_dest_cost)
+    fig,ax=plt.subplots()
+    fig.suptitle('wait={0},move={1},take={2}'.format(round(np.average(waiting_time_cost),2),round(np.average(taxi_orig_cost),2),round(np.average(orig_dest_cost),2)))
+    ax.bar(label,y1,label='Waiting time',align='center')
+    ax.bar(label,y2,bottom=y1,label='move to passenger',align='center')
+    ax.bar(label,y3,bottom=y1+y2,label='take passenger',align='center')
+    ax.set_xticklabels(label, rotation=15, ha='center')
+    plt.legend()
+    #plt.show()
+    plt.savefig('./graph.png')
+    #print('left order time',np.average(left_order_time))
+    #print('move to passengers',np.average(taxi_start_distance))
+    #print('take passengers',np.average(distance_order))
+    print('Cost={0}'.format(sum(waiting_time_cost)+sum(taxi_orig_cost)))
+
+
     #アニメーション
     shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
     shortest_path_chuoku.create_gif(in_dir='animation', out_filename='animation.gif')
     
 
 if __name__=='__main__':
-    Simulation(1,2,50)
+    Simulation(8,20,3600)
 

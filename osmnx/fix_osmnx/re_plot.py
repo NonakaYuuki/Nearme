@@ -291,9 +291,17 @@ def plot_graph_route(
         fig = ax.figure
 
     # scatterplot origin and destination points (first/last nodes in route)
-    x = (G.nodes[route[0]]["x"], G.nodes[route[-1]]["x"])
-    y = (G.nodes[route[0]]["y"], G.nodes[route[-1]]["y"])
-    ax.scatter(x, y, s=orig_dest_size, c=route_color, alpha=route_alpha, edgecolor="none")
+    x = (G.nodes[route[0]]["x"])
+    y = (G.nodes[route[0]]["y"])
+    ax.scatter(x, y, s=orig_dest_size, c='magenta', alpha=route_alpha, edgecolor="none")
+
+    x = (G.nodes[route[-1]]["x"])
+    y = (G.nodes[route[-1]]["y"])
+    if route_color!='r':
+        re_route_color='blue'
+    else:
+        re_route_color='red'
+    ax.scatter(x, y, s=orig_dest_size, c=re_route_color, alpha=route_alpha, edgecolor="none")
 
     # assemble the route edge geometries' x and y coords then plot the line
     x = []
