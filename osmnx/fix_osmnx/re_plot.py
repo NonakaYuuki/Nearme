@@ -125,21 +125,21 @@ def get_edge_colors_by_attr(
 def plot_graph(
     G,
     ax=None,
-    figsize=(8, 8),
+    figsize=(15, 15),
     bgcolor="#111111",
     node_color="w",
-    node_size=15,
-    node_alpha=None,
+    node_size=0.05,
+    node_alpha=0.8,
     node_edgecolor="none",
     node_zorder=1,
     edge_color="#999999",
-    edge_linewidth=1,
-    edge_alpha=None,
+    edge_linewidth=0.5,
+    edge_alpha=0.8,
     show=True,
     close=False,
     save=False,
     filepath=None,
-    dpi=300,
+    dpi=1000,
     bbox=None,
 ):
     """
@@ -247,9 +247,9 @@ def plot_graph_route(
     G,
     route,
     route_color="r",
-    route_linewidth=4,
-    route_alpha=0.5,
-    orig_dest_size=100,
+    route_linewidth=1,
+    route_alpha=1,
+    orig_dest_size=50,
     ax=None,
     **pg_kwargs,
 ):
@@ -293,15 +293,23 @@ def plot_graph_route(
     # scatterplot origin and destination points (first/last nodes in route)
     x = (G.nodes[route[0]]["x"])
     y = (G.nodes[route[0]]["y"])
-    ax.scatter(x, y, s=orig_dest_size, c='magenta', alpha=route_alpha, edgecolor="none")
+    if route_color!='r':
+        mark='*'
+        orig_dest_size=80
+    else:
+        mark='o'
+    ax.scatter(x, y, s=orig_dest_size, c='c', alpha=route_alpha, edgecolor="none",marker=mark)
 
     x = (G.nodes[route[-1]]["x"])
     y = (G.nodes[route[-1]]["y"])
     if route_color!='r':
-        re_route_color='blue'
+        re_route_color='black'
+        orig_dest_size=80
+        mark='*'
     else:
         re_route_color='red'
-    ax.scatter(x, y, s=orig_dest_size, c=re_route_color, alpha=route_alpha, edgecolor="none")
+        mark='o'
+    ax.scatter(x, y, s=orig_dest_size, c=re_route_color, alpha=route_alpha, edgecolor="none",marker=mark)
 
     # assemble the route edge geometries' x and y coords then plot the line
     x = []
@@ -327,7 +335,7 @@ def plot_graph_route(
     return fig, ax
 
 
-def plot_graph_routes(G, routes, route_colors="r", route_linewidths=4, **pgr_kwargs):
+def plot_graph_routes(G, routes, route_colors="r", route_linewidths=1, **pgr_kwargs):
     """
     Plot several routes along a graph.
 

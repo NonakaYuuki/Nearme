@@ -43,7 +43,7 @@ def route(orig,dest,time):
 #アニメーション
 def plot(taxi_list,order_list,timespan):
     #animationディレクトリを再生成
-    target_dir = 'animation'
+    target_dir = './osmnx/animation'
     shutil.rmtree(target_dir)
     os.mkdir(target_dir)
 
@@ -62,11 +62,11 @@ def plot(taxi_list,order_list,timespan):
                 route_color_list.append('orange')
     
         if len(route_list)>1:
-            fig,ax=re_plot.plot_graph_routes(G,route_list,route_colors=route_color_list,node_color='springgreen',bgcolor='white',edge_color='springgreen')
+            fig,ax=re_plot.plot_graph_routes(G,route_list,route_colors=route_color_list,node_color='gray',bgcolor='white',edge_color='gray')
         else:
-            fig,ax=re_plot.plot_graph_route(G,route_list[0],route_color=route_color_list[0],node_color='springgreen',bgcolor='white',edge_color='springgreen')
+            fig,ax=re_plot.plot_graph_route(G,route_list[0],route_color=route_color_list[0],node_color='gray',bgcolor='white',edge_color='gray')
     
-        fig.savefig('./animation/t={0}s.png'.format(t+1000000))
+        fig.savefig('./osmnx/animation/t={0}s.png'.format(t+1000000))
         #fig.clf()
 
 from PIL import Image
