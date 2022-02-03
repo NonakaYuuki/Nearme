@@ -48,7 +48,7 @@ def plot(taxi_list,order_list,timespan):
     os.mkdir(target_dir)
 
     for t in range(timespan*10+1):
-        if t%600!=0: #コマ数を削る(何秒ごとにするか)
+        if t%1000!=0: #コマ数を削る(何秒ごとにするか)
             continue
         route_list=[]
         route_color_list=[]

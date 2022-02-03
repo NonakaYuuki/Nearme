@@ -2,15 +2,18 @@ import osmnx as ox
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import ArtistAnimation
-place = {'city' : 'Chuo',
+place = [{'city' : 'Chuo',
          'state' : 'Tokyo',
-         'country' : 'Japan'}
-#G = ox.graph_from_place(place, network_type="drive")
-#route1 = ox.shortest_path(G, list(G)[2], list(G)[2], weight="travel_time")
-#route2 = ox.shortest_path(G, list(G)[4], list(G)[4], weight="travel_time")
+         'country' : 'Japan'},
+         {'city' : 'Koto',
+         'state' : 'Tokyo',
+         'country' : 'Japan'}]
+G = ox.graph_from_place(place, network_type="drive")
+route1 = ox.shortest_path(G, list(G)[2], list(G)[2], weight="travel_time")
+route2 = ox.shortest_path(G, list(G)[4], list(G)[ox.stats.intersection_count(G,min_streets=1)-30], weight="travel_time")
 
 #artists=[]
-#fig,ax=ox.plot.plot_graph_route(G,route2,route_color='r',node_color='g',bgcolor='white',edge_color='g')
+fig,ax=ox.plot.plot_graph_route(G,route2,route_color='r',node_color='g',bgcolor='white',edge_color='g')
 #fig.savefig('./osmnx/animation/anim.png')
 
 #fig,ax=ox.plot.plot_graph_route(G,route2,route_color='r',node_color='g',bgcolor='white',edge_color='g')
@@ -18,7 +21,7 @@ place = {'city' : 'Chuo',
 
 
 
-
+"""
 from PIL import Image
 import os
 import glob
@@ -44,5 +47,5 @@ def create_gif(in_dir, out_filename):
 # GIFアニメーションを作成する関数を実行する
 if __name__=='__main__':
     create_gif(in_dir='animation', out_filename='animation.gif')
-
+"""
 

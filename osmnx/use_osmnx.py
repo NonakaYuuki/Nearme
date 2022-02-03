@@ -43,7 +43,7 @@ def which_taxi(order_node,taxi_list,t):
     return [taxi_list[np.argmin(distance_list)],min(distance_list),route_list[np.argmin(distance_list)]]
 
 #simulation
-def Simulation(number_of_taxi,number_of_order,timespan):
+def Simulation(number_of_taxi,number_of_order,timespan,graph=True,animation=True):
     #タクシーのオブジェクト生成
     random.seed(1)
     taxi_list_c=[]
@@ -171,40 +171,44 @@ def Simulation(number_of_taxi,number_of_order,timespan):
             #print('kora',i)
     
     #乗車率のグラフ化
-    x=[i/10 for i in range(timespan*10+1)]
-    #print(ride_rate_list)
-    plt.plot(x,ride_rate_list)
-    plt.xlabel('time')
-    plt.ylabel('ride rate')
-    plt.ylim(0,1)
-    #plt.show()
-    plt.savefig('./osmnx/result/riderate.png')
+    if graph:
+        x=[i/10 for i in range(timespan*10+1)]
+        #print(ride_rate_list)
+        plt.plot(x,ride_rate_list)
+        plt.xlabel('time')
+        plt.ylabel('ride rate')
+        plt.ylim(0,1)
+        #plt.show()
+        plt.savefig('./osmnx/result/riderate.png')
+    
+        #時間の積み重ね棒グラフ化
+        label=[]
+        for l in range(len(order_list)):
+            label.append('Passenger{}'.format(l+1))
+        y1=np.array(waiting_time_cost)
+        y2=np.array(taxi_orig_cost)
+        y3=np.array(orig_dest_cost)
+        fig,ax=plt.subplots()
+        fig.suptitle('wait={0},move={1},take={2}'.format(round(np.average(waiting_time_cost),2),round(np.average(taxi_orig_cost),2),round(np.average(orig_dest_cost),2)))
+        ax.bar(label,y1,label='Waiting time',align='center')
+        ax.bar(label,y2,bottom=y1,label='move to passenger',align='center')
+        ax.bar(label,y3,bottom=y1+y2,label='take passenger',align='center')
+        ax.set_xticklabels(label, rotation=15, ha='center')
+        plt.legend()
+        #plt.show()
+        plt.savefig('./osmnx/result/graph.png')
+        #print('left order time',np.average(left_order_time))
+        #print('move to passengers',np.average(taxi_start_distance))
+        #print('take passengers',np.average(distance_order))
+        print('Cost={0}'.format(sum(waiting_time_cost)+sum(taxi_orig_cost)))
 
-    #時間の積み重ね棒グラフ化
-    label=[]
-    for l in range(len(order_list)):
-        label.append('Passenger{}'.format(l+1))
-    y1=np.array(waiting_time_cost)
-    y2=np.array(taxi_orig_cost)
-    y3=np.array(orig_dest_cost)
-    fig,ax=plt.subplots()
-    fig.suptitle('wait={0},move={1},take={2}'.format(round(np.average(waiting_time_cost),2),round(np.average(taxi_orig_cost),2),round(np.average(orig_dest_cost),2)))
-    ax.bar(label,y1,label='Waiting time',align='center')
-    ax.bar(label,y2,bottom=y1,label='move to passenger',align='center')
-    ax.bar(label,y3,bottom=y1+y2,label='take passenger',align='center')
-    ax.set_xticklabels(label, rotation=15, ha='center')
-    plt.legend()
-    #plt.show()
-    plt.savefig('./osmnx/result/graph.png')
-    #print('left order time',np.average(left_order_time))
-    #print('move to passengers',np.average(taxi_start_distance))
-    #print('take passengers',np.average(distance_order))
-    print('Cost={0}'.format(sum(waiting_time_cost)+sum(taxi_orig_cost)))
-
-
+    
     #アニメーション
-    shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
-    shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/result/animation.gif')
+    if animation:
+        shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
+        shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/result/animation.gif')
+    
+    return {'cost_list' : [a+b for a,b in zip(waiting_time_cost,taxi_orig_cost)]}
     
 
 if __name__=='__main__':
