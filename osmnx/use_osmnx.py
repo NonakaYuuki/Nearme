@@ -49,7 +49,7 @@ def Simulation(number_of_taxi,number_of_order,timespan,graph=True,animation=True
     taxi_list_c=[]
     for i in range(number_of_taxi):
         taxi_list_c.append(Taxi(i+1,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node))))
-        print('タクシー',taxi_list_c[-1].now_position())
+        #print('タクシー',taxi_list_c[-1].now_position())
     taxi_1=taxi_list_c[0]
     #taxi_2=taxi_list_c[1]
     taxi_list=copy.copy(taxi_list_c)
@@ -61,7 +61,7 @@ def Simulation(number_of_taxi,number_of_order,timespan,graph=True,animation=True
         order_list.append(Order(i,shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),shortest_path_chuoku.node_id(random.randint(0,shortest_path_chuoku.max_node)),random.randint(1,timespan)))
         if order_list[-1].orig==order_list[-1].dest:
             print('この客はなんだ')
-        print('注文',order_list[-1].orig,order_list[-1].dest,order_list[-1].time)
+        #print('注文',order_list[-1].orig,order_list[-1].dest,order_list[-1].time)
     
     free_taxi_list=taxi_list
     hold_taxi_list=[]
@@ -206,11 +206,11 @@ def Simulation(number_of_taxi,number_of_order,timespan,graph=True,animation=True
     #アニメーション
     if animation:
         shortest_path_chuoku.plot(taxi_list_c,order_time_list,timespan)
-        shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/result/animation.gif')
+        shortest_path_chuoku.create_gif(in_dir='./osmnx/animation', out_filename='./osmnx/result/animation/animation13.gif')
     
     return {'cost_list' : [a+b for a,b in zip(waiting_time_cost,taxi_orig_cost)]}
     
 
 if __name__=='__main__':
-    Simulation(8,20,3600)
+    Simulation(15,6,3600,graph=True,animation=True)
 

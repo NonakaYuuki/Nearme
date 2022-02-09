@@ -2,19 +2,28 @@ import osmnx as ox
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import ArtistAnimation
+from fix_osmnx import re_plot
 place = [{'city' : 'Chuo',
          'state' : 'Tokyo',
          'country' : 'Japan'},
          {'city' : 'Koto',
          'state' : 'Tokyo',
          'country' : 'Japan'}]
+    
 G = ox.graph_from_place(place, network_type="drive")
-route1 = ox.shortest_path(G, list(G)[2], list(G)[2], weight="travel_time")
-route2 = ox.shortest_path(G, list(G)[4], list(G)[ox.stats.intersection_count(G,min_streets=1)-30], weight="travel_time")
+route1 = ox.shortest_path(G, 2743194509, 2743194509, weight="travel_time")
+route2 = ox.shortest_path(G, 6484962046, 6484962046, weight="travel_time")
+route=[]
+for n, d in G.nodes(data=True):
+    if d['street_count']==1:
+        route.append(ox.shortest_path(G, n,list(G)[3] , weight="travel_time"))
+        if ox.shortest_path(G, n,list(G)[3] , weight="travel_time")==None:
+            print(n,d)
 
 #artists=[]
-fig,ax=ox.plot.plot_graph_route(G,route2,route_color='r',node_color='g',bgcolor='white',edge_color='g')
-#fig.savefig('./osmnx/animation/anim.png')
+fig,ax=re_plot.plot_graph_routes(G,[route1,route2],route_color='r',node_color='g',bgcolor='white',edge_color='g')
+
+fig.savefig('./osmnx/anim.png')
 
 #fig,ax=ox.plot.plot_graph_route(G,route2,route_color='r',node_color='g',bgcolor='white',edge_color='g')
 #plt.show()

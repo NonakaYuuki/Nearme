@@ -5,9 +5,12 @@ from matplotlib.animation import ArtistAnimation
 from fix_osmnx import re_plot
 import shutil
 
-place = {'city' : 'Chuo',
+place = [{'city' : 'Chuo',
          'state' : 'Tokyo',
-         'country' : 'Japan'}
+         'country' : 'Japan'},
+         {'city' : 'Koto',
+         'state' : 'Tokyo',
+         'country' : 'Japan'}]
 G = ox.graph_from_place(place, network_type="drive")
 
 # impute speed on all edges missing data
@@ -21,11 +24,22 @@ max_node=ox.stats.intersection_count(G,min_streets=1)-1
 
 #ノードのidを返す
 def node_id(n):
-    return list(G)[n]
+    while True:
+        if 'highway' in list(G.nodes(data=True))[n][1].keys():
+            if list(G.nodes(data=True))[n][1]['highway']!='motorway_junction':
+                return list(G)[n]
+            else:
+                n+=1
+        elif list(G)[n] in [31300453,2743194509,6395080314,6484962046,6484962048,7565908026]:
+            n+=1
+        else:
+            return list(G)[n]
 
 #ルート情報を返す関数
 def route(orig,dest,time):
     route1 = ox.shortest_path(G, orig, dest, weight="length")
+    #print(route1)
+    #print(orig,dest)
     route1_length_list=ox.utils_graph.get_route_edge_attributes(G, route1, minimize_key="length")
     node_list=[]
     time_list=[]
